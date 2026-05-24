@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Hardened Validation Helpers ---
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    
+    function isValidCandidate(candidate) {
+      return candidate.id is string
+        && candidate.name is string && candidate.name.size() > 0 && candidate.name.size() <= 100
+        && candidate.role is string && candidate.role.size() > 0 && candidate.role.size() <= 100
+        && candidate.symbol is string && candidate.symbol.size() > 0 && candidate.symbol.size() <= 50
+        && candidate.tagline is string && candidate.tagline.size() <= 200
+        && candidate.avatar is string && candidate.avatar.size() <= 500
+        && candidate.votes is int && candidate.votes >= 0;
+    }
+
+    function isValidLog(log) {
+      return log.event is string && log.event.size() > 0 && log.event.size() <= 500
+        && log.time is string && log.time.size() > 0 && log.time.size() <= 100
+        && log.type is string && (log.type == 'success' || log.type == 'warning' || log.type == 'info' || log.type == 'error')
+        && (log.timestamp == null || log.timestamp is int);
+    }
+
+    function isValidSettings(settings) {
+      return settings.adminPin is string && settings.adminPin.size() > 0 && settings.adminPin.size() <= 20
+        && settings.turnoutPercent is number && settings.turnoutPercent >= 0.0 && settings.turnoutPercent <= 100.0;
+    }
+
+    // 2. Candidates Registry
+    match /candidates/{candidateId} {
+      allow read: if true;
+      allow create, delete: if isValidId(candidateId) && (request.resource == null || isValidCandidate(request.resource.data));
+      allow update: if isValidId(candidateId) 
+        && isValidCandidate(request.resource.data)
+        && (
+          // Option A: Cast a single vote increment
+          (request.resource.data.votes == resource.data.votes + 1 
+           && request.resource.data.name == resource.data.name
+           && request.resource.data.role == resource.data.role)
+          ||
+          // Option B: Reset or administration vote clear
+          (request.resource.data.votes == 0 || request.resource.data.votes == resource.data.votes)
+        );
+    }
+
+    // 3. Activity Logs
+    match /logs/{logId} {
+      allow read: if true;
+      allow create: if isValidId(logId) && isValidLog(request.resource.data);
+      allow update, delete: if true;
+    }
+
+    // 4. Configuration settings
+    match /settings/{settingsId} {
+      allow read: if true;
+      allow write: if isValidSettings(request.resource.data);
+    }
+  }
+}
+

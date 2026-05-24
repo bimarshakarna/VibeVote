@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism custom classes translated to Bento Grid aesthetic */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(15, 23, 42, 0.08); /* slate-900/8% */
+}
+
+.glass-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), ...; /* custom soft shadow */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: #cbd5e1; /* slate-300 */
+  box-shadow: 0 10px 20px -3px rgba(15, 23, 42, 0.04), 0 4px 12px -4px rgba(15, 23, 42, 0.03);
+  transform: translateY(-4px);
+}
+
+/* Push mechanical button matching Bento theme colors */
+.button-push {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 4px 0 #312e81; /* Indigo-900 shadow */
+}
+
+.button-push:active {
+  transform: translateY(4px);
+  box-shadow: 0 0px 0 #312e81;
+}
+
+.button-push-secondary {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 4px 0 #064e3b; /* Emerald-900 shadow */
+}
+
+.button-push-secondary:active {
+  transform: translateY(4px);
+  box-shadow: 0 0px 0 #064e3b;
+}
+
+.button-push-tertiary {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 4px 0 #1e1b4b; /* dark slate/navy text shadow */
+}
+
+.button-push-tertiary:active {
+  transform: translateY(4px);
+  box-shadow: 0 0px 0 #1e1b4b;
+}
+
+/* Custom animated components */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2.5s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.emoji-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Scrollbar style compatible with Slate theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.8); /* slate-100 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4); /* slate-400 */
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6); /* slate-500 */
+}
+
+/* Shake Animation for Admin Login */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.2s ease-in-out 0s 2;
+}
+
+/* Safe Area Paddings */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+

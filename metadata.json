@@ -1,0 +1,6 @@
+{
+  "name": "VibeVote",
+  "description": "An elegant, interactive, secure digital voting portal and election management hub for high-energy civic participation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

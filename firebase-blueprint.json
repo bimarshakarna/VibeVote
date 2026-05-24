@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "Candidate": {
+      "title": "Candidate",
+      "description": "Candidate participating in the election with live vote tally.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "symbol": { "type": "string" },
+        "tagline": { "type": "string" },
+        "avatar": { "type": "string" },
+        "votes": { "type": "integer" }
+      },
+      "required": ["name", "role", "symbol", "tagline", "votes"]
+    },
+    "Log": {
+      "title": "Log",
+      "description": "Audit activity history log entry.",
+      "type": "object",
+      "properties": {
+        "event": { "type": "string" },
+        "time": { "type": "string" },
+        "type": { "type": "string", "enum": ["success", "warning", "info", "error"] }
+      },
+      "required": ["event", "time", "type"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global application configuration settings.",
+      "type": "object",
+      "properties": {
+        "adminPin": { "type": "string" },
+        "turnoutPercent": { "type": "number" }
+      },
+      "required": ["adminPin", "turnoutPercent"]
+    }
+  },
+  "firestore": {
+    "/candidates/{candidateId}": {
+      "schema": "Candidate",
+      "description": "Collection of election candidates"
+    },
+    "/logs/{logId}": {
+      "schema": "Log",
+      "description": "Collection of audit activity logs"
+    },
+    "/settings/{settingsId}": {
+      "schema": "Settings",
+      "description": "Global settings configuration document"
+    }
+  }
+}
